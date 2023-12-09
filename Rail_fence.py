@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 def chiffrer_rail_fence(message_clair, cle):
     # Initialisation de la matrice 
     rail = [['\n' for i in range(len(message_clair))]
