@@ -1,23 +1,20 @@
 import streamlit as st
-
 def chiffrer_rail_fence(message_clair, cle):
     # Initialisation de la matrice 
     rail = [['\n' for i in range(len(message_clair))]
             for j in range(cle)]
-
 
     # Trouver la direction
     dir_descendante = False
     ligne, colonne = 0, 0
 
     for i in range(len(message_clair)):
-
         if (ligne == 0) or (ligne == cle - 1):
             dir_descendante = not dir_descendante
 
         rail[ligne][colonne] = message_clair[i]
+        colonne += 1
 
-        colonne += 1        
         if dir_descendante:
             ligne += 1
         else:
@@ -27,7 +24,6 @@ def chiffrer_rail_fence(message_clair, cle):
         for j in range(len(message_clair)):
             if rail[i][j] != '\n':
                 resultat.append(rail[i][j])
-    
     return "".join(resultat)
 
 
@@ -127,4 +123,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
