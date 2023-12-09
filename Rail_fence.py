@@ -1,25 +1,22 @@
 import streamlit as st
-import matplotlib.pyplot as plt
+
 def chiffrer_rail_fence(message_clair, cle):
     # Initialisation de la matrice 
     rail = [['\n' for i in range(len(message_clair))]
             for j in range(cle)]
-    #plot
-    plot_x = []
-    plot_y = []
-    plot_marker = []
+
 
     # Trouver la direction
     dir_descendante = False
     ligne, colonne = 0, 0
 
     for i in range(len(message_clair)):
-        plot_x.append(i) #
+
         if (ligne == 0) or (ligne == cle - 1):
             dir_descendante = not dir_descendante
-        plot_y.append(ligne) #
+
         rail[ligne][colonne] = message_clair[i]
-        plot_marker.append(message_clair[i])# 
+
         colonne += 1        
         if dir_descendante:
             ligne += 1
@@ -30,14 +27,7 @@ def chiffrer_rail_fence(message_clair, cle):
         for j in range(len(message_clair)):
             if rail[i][j] != '\n':
                 resultat.append(rail[i][j])
-    #
-    fig, ax = plt.subplots()
-    ax.scatter(plot_x, plot_y)
-    for i, txt in enumerate(plot_marker):
-        plt.annotate(txt, (plot_x[i], plot_y[i]), textcoords="offset points", xytext=(0,5), ha='center')
-
-    st.pyplot(fig)
-    #
+    
     return "".join(resultat)
 
 
