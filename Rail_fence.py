@@ -1,18 +1,30 @@
 import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
+
 def chiffrer_rail_fence(message_clair, cle):
     # Initialisation de la matrice 
     rail = [['\n' for i in range(len(message_clair))]
             for j in range(cle)]
+    
+    #affichage du rail fence
+    x_plot = []
+    y_plot = []
+    annotations_plot = []
 
     # Trouver la direction
     dir_descendante = False
     ligne, colonne = 0, 0
 
     for i in range(len(message_clair)):
+        x_plot.append(i) #
         if (ligne == 0) or (ligne == cle - 1):
             dir_descendante = not dir_descendante
 
         rail[ligne][colonne] = message_clair[i]
+        y_plot.append(ligne) #
+        annotations_plot.append(message_clair[i]) #
         colonne += 1
 
         if dir_descendante:
@@ -24,6 +36,29 @@ def chiffrer_rail_fence(message_clair, cle):
         for j in range(len(message_clair)):
             if rail[i][j] != '\n':
                 resultat.append(rail[i][j])
+
+    # affichage du rail fence
+
+    x = np.array(x_plot)
+    y = np.array(y_plot)
+    x_new = np.linspace(x.min(), x.max(),500)
+    f = interp1d(x, y, kind='quadratic')
+    y_smooth=f(x_new)
+
+    fig, ax = plt.subplots()
+    ax.plot (x_new,y_smooth, color='black')
+    ax.scatter(x_plot, y_plot, label='Data Points', color='black', marker='o')
+
+    ax.set_axis_off()
+    for i in range(len(x_plot)):
+        ax.annotate(annotations_plot[i], (x_plot[i], y_plot[i]), textcoords="offset points", xytext=(10, 7), ha='right')
+
+
+
+    ax.set_title('Rail fence')
+    st.pyplot(fig)
+
+
     return "".join(resultat)
 
 
@@ -31,12 +66,18 @@ def dechiffrer_rail_fence(message_chiffre, cle):
     # Initialiser la matrice du rail fence
     rail = [['\n' for i in range(len(message_chiffre))]
             for j in range(cle)]
+    
+    #affichage du rail fence
+    x_plot = []
+    y_plot = []
+    annotations_plot = []
 
     # Déterminer la direction du remplissage de la matrice
     dir_descendante = None
     ligne, colonne = 0, 0
 
     for i in range(len(message_chiffre)):
+        x_plot.append(i) #
         if ligne == 0:
             dir_descendante = True
         if ligne == cle - 1:
@@ -69,12 +110,34 @@ def dechiffrer_rail_fence(message_chiffre, cle):
 
         if rail[ligne][colonne] != '*':
             resultat.append(rail[ligne][colonne])
+            y_plot.append(ligne) #
+            annotations_plot.append(rail[ligne][colonne]) #
             colonne += 1
 
         if dir_descendante:
             ligne += 1
         else:
             ligne -= 1
+    # affichage du rail fence
+
+    x = np.array(x_plot)
+    y = np.array(y_plot)
+    x_new = np.linspace(x.min(), x.max(),500)
+    f = interp1d(x, y, kind='quadratic')
+    y_smooth=f(x_new)
+
+    fig, ax = plt.subplots()
+    ax.plot (x_new,y_smooth, color='black')
+    ax.scatter(x_plot, y_plot, label='Data Points', color='black', marker='o')
+
+    ax.set_axis_off()
+    for i in range(len(x_plot)):
+        ax.annotate(annotations_plot[i], (x_plot[i], y_plot[i]), textcoords="offset points", xytext=(10, 7), ha='right')
+
+
+
+    ax.set_title('Rail fence')
+    st.pyplot(fig)
 
     return "".join(resultat)
 def lire_fichier(upload_file):
