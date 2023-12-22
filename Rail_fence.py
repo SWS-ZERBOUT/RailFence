@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 
+st.sidebar.text("Installing dependencies...")
+st.sidebar.code("!pip install matplotlib")
+
 def chiffrer_rail_fence(message_clair, cle):
     # Initialisation de la matrice 
     rail = [['\n' for i in range(len(message_clair))]
